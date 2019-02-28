@@ -1,3 +1,5 @@
+
+    
 // #include <graph_a.h>
 #include <iostream>
 #include <vector>
@@ -8,14 +10,33 @@ using namespace std;
 
 const uint32_t INF = 4294967295;
 
+const uint32_t min(vector<int> shwm, vector<vector<int>> visited){
+	uint32_t min = shwm[visited[0][0]];
+	uint32_t min_index = visited[0][0];
+	for (int i = 0; i < shwm.size(); ++i){
+		if ((shwm[i] < INF) and (visited[i][1] != true) )
+		{
+			min = shwm[i];
+			min_index = i;
+		}
+	}
+	return min_index;
+}
+
+
 class Graph{
 	private:
 		vector<vector <int>> graph;
 	public:
 	Graph(vector<vector<int>> &graph){
+		// this->graph = graph;
 		this->graph.swap(graph);
 		// cout << graph.size() << endl;
 	}
+	size_t size(){
+		return graph.size();
+	}
+
 	void print_graph(){
 		// cout << graph.size();
 		for (int i = 0; i < graph.size(); ++i){
@@ -103,21 +124,43 @@ void find_in_depth(vector<vector<int>> graph, int index){
 }
 
 
-void Dijkstras_alg(Graph graph, int start_vertex, int end_vertex){
-	// vector< vector<int> >  shwm(7, {0, 0, 0, 0, 0, 0, 0});//shortest_way_matrix; 
-	int size = graph[0].size();
-	int *shwm = new int[size*size];
-	for (int i = 0; i < size; ++i){
-		for (int j = 0; j < size; ++j){
-			shwm[i*size + j] = INF;
-		}
-	}
+vector<int> Dijkstras_alg(Graph graph, int start_vertex){
 	
+	int size = graph.size();
+
+	vector<int> shwm(size, INF);//shortest_way_matrix; 
+	shwm[start_vertex] = 0;
+	cout << shwm[start_vertex] << endl;
+	vector<vector<int>> visited(size, {0, 0});
+	for (int i = 0; i < size; ++i){
+		visited[i][0] = i;
+	}
+	visited[start_vertex][1] = true;
+	cout << "hello world" << endl;
+ 	// for (int i = 0; i < size; ++i){
+		// for (int j = 0; j < size; ++j){
+			// shwm[i*size + j] = INF;
+		// }
+	// }
+	int cur_v = 0;
+	while (visited.size()){
+		cur_v = min(shwm, visited);
+		for (int i = 0; i < size; ++i){
+			if (shwm[i] > shwm[cur_v] + graph[cur_v][i]){
+				shwm[i] = shwm[cur_v] + graph[cur_v][i];
+			}
+			// cur_v = 
+		}
+		visited.erase(visited.begin()+cur_v);
+	}
+	return shwm;
 	// for (int i = 0; i < graph[0].size(); ++i){
 	// 	vector<int> v;
 	// 	// shwm[i].push_back(vector<int>);
 	// }
 }
+
+
 
 
 int main(){
@@ -139,7 +182,13 @@ int main(){
 	// find_in_width(graph);
 	// find_in_depth(graph, 0);
 	// cout <<  (NULL > 12) << endl;
+
 	Graph obj(graph);
+	auto v = Dijkstras_alg(graph, 0);
+	for (int i = 0; i < v.size(); ++i){
+		cout << v[i] << endl;
+	}
+
 	obj.print_graph();
 	cout << "EXIT" << endl;
 
