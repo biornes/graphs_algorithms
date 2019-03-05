@@ -4,19 +4,26 @@
 using namespace std;
 
 
-
-
 template <typename T>
+struct adjacent_vertex
+{
+	adjacent_vertex(const size_t &num, const T &length): num_(num), length_(length){}
+	size_t num_;
+	T length_;
+};
+
+template < typename T,
+		   typename Container = vector<T>>
 class Graph
 {
 	private:
-		vector<vector<T>> graph_;
+		vector<Container<T>> graph_;
 	public:
-	Graph(vector<vector<T>> &graph): graph_(graph)
+	Graph(const vector<vector<T>> &graph): graph_(graph)
 	{
 
 	}
-	size_t size()
+	const size_t size()
 	{
 		return graph_.size();
 	}
@@ -32,7 +39,7 @@ class Graph
 			cout << endl;
 		}
 	}
-	vector<T>& operator[](uint32_t index)
+	const vector<T>& operator[](uint32_t index)
 	{
 		return graph_[index];
 	}

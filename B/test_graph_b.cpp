@@ -15,7 +15,7 @@ int main()
 						 {0, 0, 0, 1, 0, 0, 0},
 						 {0, 0, 1, 0, 0, 0, 0}
 						 };
-	Graph<uint32_t> graph(matrix);
+	Graph<uint32_t, vector<uint32_t>> graph(matrix);
 	graph.optimize();
 	graph.
 	return 0;
