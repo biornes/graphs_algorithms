@@ -7,8 +7,9 @@ using namespace std;
 template <typename T>
 struct adjacent_vertex
 {
-	size_t num;
-	T length;
+	adjacent_vertex(const size_t &num, const T &length): num_(num), length_(length){}
+	size_t num_;
+	T length_;
 };
 
 template <typename T>
@@ -45,17 +46,19 @@ class Graph
 	{
 		size_t size = graph_.size();
 		// временный массив для хранения оптимизированного вектора
-		vector<vector<T>> temp(size, {});
+		// vector<adjacent_vertex<T>> temp(size);
+		vector<pair<size_t, T>> temp(size);
 		for (int i = 0; i < size; ++i)
 		{
 			for (int j = 0; j < size; ++j)
 			{
 				if (graph_[i][j] != 0){
-					temp[i].push_back()
+
+					temp[i].push_back(make_pair(j, graph_[i][j]));
 				}
 			}
 		}
-		// graph_
+		// swap(graph_, temp)
 	}
 };
 
