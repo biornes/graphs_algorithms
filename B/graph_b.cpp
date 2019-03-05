@@ -4,13 +4,7 @@
 using namespace std;
 
 
-template <typename T>
-struct adjacent_vertex
-{
-	adjacent_vertex(const size_t &num, const T &length): num_(num), length_(length){}
-	size_t num_;
-	T length_;
-};
+
 
 template <typename T>
 class Graph
