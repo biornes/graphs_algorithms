@@ -104,33 +104,66 @@ class Graph
 		vector<Edge<T>> result;
 		auto edges = get_edges();
 		// vector<bool> bridges(edges.size(), false);
-		Graph<T> copy_graph(graph_);
+		// Graph<T> copy_graph(graph_);
 		vector<Edge<T>> bridges;
 		// vector
+		int bridges_count = 0;
 		vector<vector<T>> copy_graph(graph_);
 		// Копия графа для поиска мостов в графе;
 		for (int i = 0; i < edges.size(); ++i)
 		{
+			for (int j = 0; j < edges[i].size(); ++j)
+			{
+				cout << edges[i][j].__first_v__ << " " << edges[i][j].__end_v__ << " ";
+			}
+			cout << endl;
+		}
+
+
+		for (int i = 0; i < edges.size(); ++i)
+		{
 			// if (edges[i].size() == 0) continue;
-			auto cur_edge = *edges[start_vertex].begin();
-			auto cur_vertex = cur_edge.__first_v__;
-			cout << "CUR EDGE: "  << cur_edge.__first_v__  << " " << cur_edge.__end_v__ << endl;
-			auto cur_quantity = find_in_depth(cur_vertex);
-			cout << "cur_quantity: " << cur_quantity << endl;
-
-			graph_[cur_vertex][cur_edge.__end_v__] = 0;
-			// after_delete_vertex
-			auto afd = find_in_depth(cur_vertex);
-			if (afd != cur_vertex)
+			cout << "EDGE[i].size(): " << edges[start_vertex].size() << endl;
+			for (auto j = 0; j != edges[start_vertex].size(); ++j)
 			{
-				graph_[cur_vertex][cur_edge.__end_v__] = 1;
-			}
-			else
-			{
+				auto cur_edge = edges[start_vertex][j];
+				auto cur_vertex = cur_edge.__first_v__;
+				cout << "CUR EDGE: "  << cur_edge.__first_v__  << " " << cur_edge.__end_v__ << endl;
+				size_t cur_quantity = find_in_depth(cur_edge.__end_v__);
+				cout << "cur_quantity: " << cur_quantity << endl;
+
+				graph_[cur_vertex][cur_edge.__end_v__] = 0;
+				// after_delete_vertex
+				size_t afd = find_in_depth(cur_edge.__end_v__);
+				cout << "afd_quantity: " << afd << endl;
+				// cout << "edges[i].size(): " << edges[i].size() << endl;
+				// cout << (afd != cur_vertex) << endl;
+				if (afd < cur_vertex and edges[i].size() > 1)
+				{
+					graph_[cur_vertex][cur_edge.__end_v__] = 1;
+					// ++bridges_count;
+					continue;
+				}
+				edges[start_vertex].erase(edges[start_vertex].begin()+j);
+				result.push_back(*(edges[start_vertex].begin()+j));
+				cout << edges[start_vertex].size() << endl;
+				start_vertex = cur_edge.__end_v__;
+				cout << "START VERTEX: " << start_vertex << endl;
+				
+				
+				break;
 
 			}
-			edges[start_vertex].erase(edges[start_vertex].begin());
-			start_vertex = cur_edge.__end_v__;
+			
+			
+
+			// if (afd != cur_vertex and edges.size() == bridges_count)
+
+			// else
+			// {
+
+			// }
+
 
 			// {
 
@@ -164,11 +197,11 @@ class Graph
 		// 		}
 		// 	}
 		// }
-		for (int i = 0; i < bridges.size(); ++i)
-		{
-			result.push_back(bridges[0]);
-			bridges.erase(bridges.begin());
-		}
+		// for (int i = 0; i < bridges.size(); ++i)
+		// {
+		// 	result.push_back(bridges[0]);
+		// 	bridges.erase(bridges.begin());
+		// }
 		return result;
 	}
 
@@ -193,7 +226,7 @@ class Graph
 				if (result[j] != 0) continue;
 				if (graph_[i][j] != 0){
 					stack.push_back(j);
-					cout << "I J: " << i << " " << j << endl;
+					// cout << "I J: " << i << " " << j << endl;
 					++count;
 				}
 			}
