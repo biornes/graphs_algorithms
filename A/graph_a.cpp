@@ -102,18 +102,21 @@ void find_in_width(Graph<T> graph, int index){
 
 template <typename T>
 void find_in_depth(Graph<T> graph, int index){
-	stack<int> stack;
-	stack.push(index);
+	// stack<int> stack;
+	vector<int> stack;
+	stack.push_back(index);
 	int i;
 	vector<int> result(graph[0].size(), 0);
+	vector<int> visit_order(graph.size());
 	while (!stack.empty()){
 
-		i = stack.top();
-		stack.pop();
+		i = *stack.begin();
+		visit_order.push_back(i);
+		stack.erase(stack.begin());
 		for (int j = graph[0].size()-1; j > 0 ; --j){
 			if (result[j] != 0) continue;
 			if (graph[i][j] != 0){
-				stack.push(j);
+				stack.push_back(j);
 			}
 		}
 		result[i] = 1;
