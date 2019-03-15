@@ -17,14 +17,20 @@ int main()
 	// 					 {0, 0, 1, 0, 0, 0, 0}
 	// 					 };
 	vector<vector<uint32_t>> matrix = {
-										{0, 1, 0, 1},
-										{0, 0, 1, 0},
-										{1, 0, 0, 0},
-										{0, 0, 0, 0}
+										// {0, 1, 0, 1},
+										// {0, 0, 1, 0},
+										// {1, 0, 0, 0},
+										// {0, 0, 0, 0}
+										{0, 1, 0, 1, 0, 0},
+										{0, 0, 1, 0, 1, 0},
+										{1, 0, 0, 1, 0, 0},
+										{0, 1, 0, 0, 1, 0},
+										{1, 0, 0, 0, 0, 1},
+										{0, 0, 1, 0, 0, 0}
 									  };
 	Graph<uint32_t> graph(matrix);
 	// graph.optimize();
-	auto result = graph.Flyory_algorithm(0);
+	auto result = graph.Flyory_algorithm(5);
 
 	// graph.Flyory_algorithm(0);
 	cout << result.size() << endl;

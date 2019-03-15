@@ -103,52 +103,71 @@ class Graph
 	{
 		vector<Edge<T>> result;
 		auto edges = get_edges();
+		// cout << "EDGES SIZE: " << edges.size() << endl;
+		int counter = 0;
+		for (int i = 0; i < edges.size(); ++i)
+		{
+			counter += edges[i].size();
+			// for (int j = 0; j < edges[i].size(); ++j)
+			// {
+
+			// }
+		}
+
+		// cout << "COUNTER" << counter << endl;
 		// vector<bool> bridges(edges.size(), false);
 		// Graph<T> copy_graph(graph_);
 		vector<Edge<T>> bridges;
 		// vector
-		int bridges_count = 0;
+		// int bridges_count = 0;
 		vector<vector<T>> copy_graph(graph_);
 		// Копия графа для поиска мостов в графе;
-		for (int i = 0; i < edges.size(); ++i)
-		{
-			for (int j = 0; j < edges[i].size(); ++j)
-			{
-				cout << edges[i][j].__first_v__ << " " << edges[i][j].__end_v__ << " ";
-			}
-			cout << endl;
-		}
+		// for (int i = 0; i < edges.size(); ++i)
+		// {
+		// 	for (int j = 0; j < edges[i].size(); ++j)
+		// 	{
+		// 		cout << edges[i][j].__first_v__ << " " << edges[i][j].__end_v__ << " ";
+		// 	}
+		// 	cout << endl;
+		// }
 
-
-		for (int i = 0; i < edges.size(); ++i)
+		// int bridges_count = 0;
+		for (int i = 0; i < counter; ++i)
 		{
 			// if (edges[i].size() == 0) continue;
-			cout << "EDGE[i].size(): " << edges[start_vertex].size() << endl;
-			for (auto j = 0; j != edges[start_vertex].size(); ++j)
+			// cout << "EDGE[i].size(): " << edges[start_vertex].size() << endl;
+			for (auto j = 0; j < edges[start_vertex].size(); ++j)
 			{
 				auto cur_edge = edges[start_vertex][j];
 				auto cur_vertex = cur_edge.__first_v__;
-				cout << "CUR EDGE: "  << cur_edge.__first_v__  << " " << cur_edge.__end_v__ << endl;
+				// cout << "CUR EDGE: "  << cur_edge.__first_v__  << " " << cur_edge.__end_v__ << endl;
 				size_t cur_quantity = find_in_depth(cur_edge.__end_v__);
-				cout << "cur_quantity: " << cur_quantity << endl;
+				// cout << "cur_quantity: " << cur_quantity << endl;
 
 				graph_[cur_vertex][cur_edge.__end_v__] = 0;
 				// after_delete_vertex
 				size_t afd = find_in_depth(cur_edge.__end_v__);
-				cout << "afd_quantity: " << afd << endl;
+				// cout << "afd_quantity: " << afd << endl;
 				// cout << "edges[i].size(): " << edges[i].size() << endl;
 				// cout << (afd != cur_vertex) << endl;
-				if (afd < cur_vertex and edges[i].size() > 1)
+				// cout << "SOME SHIT: " << (afd < cur_quantity ) << endl;
+				if (afd < cur_quantity and edges[start_vertex].size() > 1)
 				{
 					graph_[cur_vertex][cur_edge.__end_v__] = 1;
+					// auto flag_bridge = true;
 					// ++bridges_count;
+					// ++bridges_count;
+					// if (j+1 != edges[start_vertex].size())
 					continue;
+					// else if (bridges_count == edges[start_vertex].size()) j = 0;
 				}
-				edges[start_vertex].erase(edges[start_vertex].begin()+j);
 				result.push_back(*(edges[start_vertex].begin()+j));
-				cout << edges[start_vertex].size() << endl;
+				edges[start_vertex].erase(edges[start_vertex].begin()+j);
+				
+				
 				start_vertex = cur_edge.__end_v__;
-				cout << "START VERTEX: " << start_vertex << endl;
+				// cout << edges[start_vertex].size() << endl;
+				// cout << "START VERTEX: " << start_vertex << endl;
 				
 				
 				break;
@@ -236,44 +255,7 @@ class Graph
 		return count;
 	}
 
-	bool find_in_stack(vector<T> stack, int vertex){
-		for (int i = 0; i < stack.size(); ++i){
-			if (vertex == stack[i]) return true;
-		}
-		return false;
-	}
 
-	const auto find_in_width(int index){
-		static vector<T> stack;
-		stack.push_back(index);
-		static size_t counter = 0;
-
-
-		// массив с закрашенными индексами;
-		vector<int> result(graph_[0].size(), 0);
-		while (stack.size() != 0)
-		{
-			cout << "Stack size: " << stack.size() << endl;
-			int i = stack[0];		
-				for (int j = 0; j < graph_[i].size(); ++j)
-				{
-					if (result[j] != 0) continue;
-					if (graph_[i][j] != 0){
-						if (!find_in_stack(stack, j))
-						{
-							// cout << "J: " << j << endl;
-					 		stack.push_back(j);
-					 		
-						}
-					}
-				}
-			result[i] = 1;
-
-			++counter;
-			stack.erase(stack.begin());
-		}
-		return counter;
-	}
 	auto& get_edges()
 	{
 		static vector<vector<Edge<T>>> edges(graph_.size(), vector<Edge<T>>());
@@ -297,7 +279,7 @@ class Graph
 			{
 				if (graph_[i][j] == 0) continue;
 				// graph_.Kruskals
-				cout << "Push back edge: " << endl;
+				// cout << "Push back edge: " << endl;
 				edges[i].push_back(Edge<T>(i, j, graph_[i][j]));
 				// temp[0] = i;
 				// temp[1] = j;
@@ -309,32 +291,6 @@ class Graph
 	}
 
 
-	// template <typename T>
-	auto Floyd_Uorshell(Graph<T> graph){
-		for (int i = 0; i < graph.size(); ++i)
-		{
-			for (int j = 0 ; j < graph[i].size(); ++j)
-			{
-				if (i == j) continue;
-				if (graph[i][j] == 0)
-					graph[i][j] = INF;
-			}
-		}
-		for (int k = 0; k < graph.size(); ++k)
-		{
-			for(int i = 0; i < graph.size(); ++i)
-			{
-				for (int j = 0; j < graph[i].size(); ++j)
-				{
-					if (graph[i][j] > graph[i][k] + graph[k][j])
-					{
-						graph[i][j] = graph[i][k] + graph[k][j];
-					}
-				}
-			}
-		}
-		return graph;
-	}
 
 };
 
