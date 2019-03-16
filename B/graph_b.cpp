@@ -141,12 +141,12 @@ class Graph
 				auto cur_edge = edges[start_vertex][j];
 				auto cur_vertex = cur_edge.__first_v__;
 				// cout << "CUR EDGE: "  << cur_edge.__first_v__  << " " << cur_edge.__end_v__ << endl;
-				size_t cur_quantity = find_in_depth(cur_edge.__end_v__);
+				size_t cur_quantity = find_in_depth(cur_edge.__end_v__<vector<bool>(graph_.size())).size();
 				// cout << "cur_quantity: " << cur_quantity << endl;
 
 				graph_[cur_vertex][cur_edge.__end_v__] = 0;
 				// after_delete_vertex
-				size_t afd = find_in_depth(cur_edge.__end_v__);
+				size_t afd = find_in_depth(cur_edge.__end_v__, vector<bool>(graph_.size())).size();
 				// cout << "afd_quantity: " << afd << endl;
 				// cout << "edges[i].size(): " << edges[i].size() << endl;
 				// cout << (afd != cur_vertex) << endl;
@@ -189,7 +189,7 @@ class Graph
 			// }
 		}
 
-
+		swap(graph_, copy_graph);
 		
 		// for (int i = 0; i < graph_.size(); ++i)
 		// {
@@ -224,37 +224,36 @@ class Graph
 		return result;
 	}
 
-	auto find_in_depth(int index){
+	auto find_in_depth(int index, vector<bool> &visit){
 		// stack<int> stack;
 		vector<int> stack;
 		stack.push_back(index);
 		int i;
-		vector<int> result(graph_.size(), 0);
-		int count = 0;
-		// vector<int> visit_order(graph_.size());
+		// vector<int> result(graph_.size(), 0);
+		// int count = 0;
+		vector<int> visit_order;
 		while (!stack.empty()){
 
 			i = *stack.begin();
-			// visit_order.push_back(i);
+			visit_order.push_back(i);
 			// cout << "For the second iteration: " << graph_[i][0] << endl;
 			stack.erase(stack.begin());
 			// for (int j = graph_[0].size()-1; j > 0 ; --j){
 			for (int j = 0; j < graph_[0].size(); ++j)
 			{
 
-				if (result[j] != 0) continue;
+				if (visit[j] != false) continue;
 				if (graph_[i][j] != 0){
 					stack.push_back(j);
 					// cout << "I J: " << i << " " << j << endl;
-					++count;
+					// ++count;
 				}
 			}
-			result[i] = 1;
+			visit[i] = true;
 		}
-		// return visit_order.size();
-		return count;
+		// return visit_order.size();	
+		return visit_order;
 	}
-
 
 	auto& get_edges()
 	{
@@ -290,6 +289,98 @@ class Graph
 		return edges;
 	}
 
+	void FindEulerPath(size_t start_vertex, vector<size_t> &stack){
+		for (int i = 0; i < graph_.size(); ++i)
+		{
+			// cout << i << endl;
+			if (graph_[start_vertex][i] != 1) continue;
+			// {
+				graph_[start_vertex][i] = 0;
+				FindEulerPath(i, stack);
+			// }
+		}
+		stack.push_back(start_vertex);
+	}
+
+	void FindEulerPathLauncher(size_t start_vertex, vector<size_t> &stack)
+	{
+		vector<vector<T>> copy_graph(graph_);
+		FindEulerPath(start_vertex, stack);
+		swap(graph_, copy_graph);
+		copy_graph.clear();
+		// while (stack.size() != counter)
+		// {
+		// 	// for (auto i = 0; i < graph_.size(); ++i)
+		// 	// {
+		// 		// cout << stack.size() << " ";
+		// 		// cout << stack.back() << endl;
+		// 		for (int j = 0; j < graph_[stack.back()].size(); ++j)
+		// 		{
+		// 			if (graph_[stack.back()][j] != 1) continue;
+		// 			cout << stack.back() << " " << j << " "; 
+		// 			graph_[stack.back()][j] = 0;
+		// 			stack.push_back(j);
+		// 			break;
+		// 		}
+				// break;
+			// }
+		// }
+		// cout << stack.size();
+		// return stack;
+	}	
+
+	auto Kosarayu_algorithm()
+	{
+		vector<vector<int>> result;
+		vector<bool> visit(graph_.size(), false);
+		vector<size_t> stack;
+		vector<vector<T>> graph_T(graph_.size(), vector<T>());
+		// cout << graph_[1][1] << endl;
+		for (int i = 0; i < graph_.size(); ++i)
+		{
+			for (int j = 0; j < graph_[i].size(); ++j)
+			{
+				// cout << graph_[j][i] << " " << endl;
+				graph_T[i].push_back(graph_[j][i]);
+				// cout << "Here" << endl;
+			}
+		}
+		swap(graph_T, graph_);
+		for (int i = 0; i < graph_T.size(); ++i)
+		{
+			if (visit[i] == false)
+			{
+				dfs_inv(stack, visit, i);
+			}
+		}
+
+		for (int i = 0; i < visit.size(); ++i)
+		{
+			visit[i] = false;
+		}
+
+
+		// visit(visit.size(), false);
+		// for_each(visit.begin(), visit.end(), [](int i)
+		// {
+		// 	visit[i] = false;
+		// })
+		swap(graph_T, graph_);
+		while(!stack.empty())
+		{
+			auto i = stack.back();
+			cout << "I: " << i << endl;
+			stack.pop_back();
+			if (visit[i] == false)
+			{
+				auto x = find_in_depth(i, visit);
+				// cout << x[0];
+				result.push_back(x);
+			}
+		}
+
+		return result; 
+	}
 
 
 };
