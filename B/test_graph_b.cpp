@@ -9,19 +9,53 @@
 
 int main()
 {
-	// vector<vector<uint32_t>> matrix = {{0, 2, 4, 0, 0, 0, 0},
-	// 					 {2, 0, 0, 1, 1, 0, 0},
-	// 					 {4, 0, 0, 1, 0, 0, 1},
-	// 					 {0, 1, 1, 0, 1, 1, 0},
-	// 					 {0, 1, 0, 1, 0, 0, 0},
-	// 					 {0, 0, 0, 1, 0, 0, 0},
-	// 					 {0, 0, 1, 0, 0, 0, 0}
-	// 					 };
-	vector<vector<uint32_t>> matrix = {
-										// {0, 1, 0, 1},
-										// {0, 0, 1, 0},
-										// {1, 0, 0, 0},
-										// {0, 0, 0, 0}
+
+	vector<char> char_vertex = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+
+	vector<vector<uint32_t>> Tarjans_matrix = {
+												{0, 1, 1, 0, 0, 0, 0},
+												{0, 0, 0, 1, 0, 0, 0},
+												{0, 0, 0, 1, 0, 1, 0},
+												{0, 0, 0, 0, 0, 0, 1},
+												{0, 0, 0, 0, 0, 1, 0},
+												{0, 0, 0, 0, 0, 0, 1},
+												{0, 0, 0, 0, 0, 0, 0}
+												};
+
+
+	Graph<uint32_t> Tarjans_graph(Tarjans_matrix);
+
+
+
+	cout << "Test Tarjan's algorithm:" << endl;
+
+	auto result_Tarjan = Tarjans_graph.Tarjans_algorithm();
+	for (auto i = result_Tarjan.rbegin(); i != result_Tarjan.rend(); ++i)
+	{
+		cout << *i << ": " << char_vertex[*i] << endl;
+	}
+
+	vector<vector<uint32_t>> Flyory_matrix = {
+												{0, 1, 0, 1, 0, 0},
+												{0, 0, 1, 0, 1, 0},
+												{1, 0, 0, 1, 0, 0},
+												{0, 1, 0, 0, 1, 0},
+												{1, 0, 0, 0, 0, 1},
+												{0, 0, 1, 0, 0, 0}
+									  		};
+
+
+	Graph<uint32_t>  Flyory_graph(Flyory_matrix);
+	auto result_Flyory = Flyory_graph.Flyory_algorithm(5);
+	cout << "Test Floyry's algorithm:" << endl;
+	for (int i = 0; i < result_Flyory.size(); ++i){
+			cout << "Edge: ";
+			cout << result_Flyory[i].__first_v__ << " " << result_Flyory[i].__end_v__ << endl;
+	}
+	cout << "Check Euler Cycle: " << Flyory_graph.check_Euler_cycle() << endl;
+
+
+	vector<vector<uint32_t>> Euler_cycle_matrix{
 										{0, 1, 0, 1, 0, 0},
 										{0, 0, 1, 0, 1, 0},
 										{1, 0, 0, 1, 0, 0},
@@ -29,30 +63,20 @@ int main()
 										{1, 0, 0, 0, 0, 1},
 										{0, 0, 1, 0, 0, 0}
 									  };
-	Graph<uint32_t> graph(matrix);
-	// graph.optimize();
-	// auto result = graph.Flyory_algorithm(5);
-	// // graph.print_graph();
-	// // graph.Flyory_algorithm(0);
-	// cout << result.size() << endl;
-	// for (int i = 0; i < result.size(); ++i){
-	// 	cout << result[i].__first_v__ << " " << result[i].__end_v__ << endl;
-	// }
 
-	// vector<uint32_t> result_eulerPath; 
-	// graph.FindEulerPathLauncher(5, result_eulerPath);
-	// for (int i = 0; i < result_eulerPath.size(); ++i)
-	// {	
-	// 	/* code */
-	// 	cout << result_eulerPath[i] << " ";
-	// }
-	// cout << "New\n";
-	// cout << "Test Tarjans algorithm:" << endl;
-	// auto stack = graph.Tarjans_algorithm();
-	// for (auto i = stack.rbegin(); i != stack.rend(); ++i)
-	// {
-	// 	cout << *i << endl;
-	// }
+
+	Graph<uint32_t> Euler_graph(Euler_cycle_matrix);
+	vector<uint32_t> result_EulerPath; 
+	Euler_graph.FindEulerPathLauncher(5, result_EulerPath);
+	cout << "Test for search Euler's path algorithm:" << endl;
+	for (int i = 0; i < result_EulerPath.size(); ++i)
+	{	
+		/* code */
+		cout << char_vertex[result_EulerPath[i]] << " ";
+	}
+	cout << endl;
+
+
 	vector<vector<uint32_t>> graph_Kosarayu = {
 												{0, 0, 0, 1, 0, 0, 0, 0},
 												{1, 0, 0, 0, 0, 0, 0, 0},
@@ -68,38 +92,17 @@ int main()
 	Graph<uint32_t> for_Kosarayu(graph_Kosarayu);
 	auto result_Kosarayu = for_Kosarayu.Kosarayu_algorithm();
 
-	cout << result_Kosarayu.size() << endl;
-
+	cout << "Test Kosarayu's algorithm:" << endl;
 	for (int i = 0; i < result_Kosarayu.size(); ++i)
 	{
 		for (int j = 0; j < result_Kosarayu[i].size(); ++j)
 		{
-			/* code */
+
 			cout << result_Kosarayu[i][j] << " ";
 		}
 		cout << endl;
 	}
 
-	// for (auto x: result_Kosarayu)
-	// {
-	// 	for (auto z: *x){
-	// 		cout << z << " ";
-	// 	}
-	// 	// cout << x << " ";
-	// 	cout << endl;
-	// }
-
-	// cout << "************\n" << endl;
-	// for (auto x: stack)
-	// cout << stack.size() << endl;
-	// for (auto i: stack)
-	// {
-	// 	cout << i << endl;
-	// }
-
-	// cout << *stack.begin() << endl;
-
-	// graph.
 	cout << "QUIT" << endl;
 	return 0;
 }
